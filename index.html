@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shaif — Photographer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f9f8f6;
+        --text: #1a1a1a;
+        --muted: #999;
+        --border: #e4e2df;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", sans-serif;
+        font-weight: 300;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ─── NAV ─────────────────────────────────────── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.6rem 4rem;
+        background: var(--bg);
+        transition: box-shadow 0.3s;
+      }
+      nav.scrolled {
+        box-shadow: 0 1px 0 var(--border);
+      }
+      .nav-logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.6rem;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-decoration: none;
+        color: var(--text);
+      }
+      .nav-links {
+        display: flex;
+        gap: 2.5rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--text);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--muted);
+      }
+
+      /* ─── HERO ────────────────────────────────────── */
+      #hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        position: relative;
+      }
+      .hero-name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(5rem, 16vw, 13rem);
+        font-weight: 300;
+        letter-spacing: 0.06em;
+        line-height: 1;
+        margin-bottom: 2rem;
+      }
+      .hero-tagline {
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .hero-scroll {
+        position: absolute;
+        bottom: 3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .hero-scroll:hover {
+        color: var(--text);
+      }
+      .hero-scroll::after {
+        content: "";
+        width: 1px;
+        height: 3.5rem;
+        background: currentColor;
+        display: block;
+        animation: scrollLine 1.8s ease-in-out infinite;
+      }
+      @keyframes scrollLine {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scaleY(0.6);
+          transform-origin: top;
+        }
+        50% {
+          opacity: 1;
+          transform: scaleY(1);
+          transform-origin: top;
+        }
+      }
+
+      /* ─── WORK INTRO ──────────────────────────────── */
+      #work {
+        padding-top: 6rem;
+      }
+      .work-label {
+        display: block;
+        padding: 0 4rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 5rem;
+      }
+
+      /* ─── ALBUM BLOCK ─────────────────────────────── */
+      .album {
+        margin-bottom: 7rem;
+      }
+      .album-header {
+        padding: 0 4rem 2.5rem;
+        display: flex;
+        align-items: baseline;
+        gap: 1.5rem;
+      }
+      .album-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2rem, 4.5vw, 3.2rem);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+      }
+      .album-meta {
+        font-size: 0.68rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* ─── GALLERY GRID ────────────────────────────── */
+      .gallery {
+        padding: 0 4rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+      }
+      .gallery-item {
+        aspect-ratio: 3 / 2;
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--border);
+      }
+      .gallery-item.tall {
+        aspect-ratio: 2 / 3;
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition:
+          transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          filter 0.4s;
+        filter: brightness(0.96);
+      }
+      .gallery-item:hover img {
+        transform: scale(1.05);
+        filter: brightness(1.02);
+      }
+
+      /* ─── DIVIDER ────────────────────────────────── */
+      .divider {
+        width: 4rem;
+        height: 1px;
+        background: var(--border);
+        margin: 0 4rem 7rem;
+      }
+
+      /* ─── CONTACT ────────────────────────────────── */
+      #contact {
+        padding: 8rem 4rem 9rem;
+        text-align: center;
+        border-top: 1px solid var(--border);
+      }
+      .contact-eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        display: block;
+      }
+      .contact-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 300;
+        font-style: italic;
+        letter-spacing: 0.04em;
+        margin-bottom: 3rem;
+      }
+      .contact-email {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: var(--text);
+        text-decoration: none;
+        border-bottom: 1px solid var(--text);
+        padding-bottom: 0.1em;
+        transition:
+          color 0.2s,
+          border-color 0.2s;
+      }
+      .contact-email:hover {
+        color: var(--muted);
+        border-color: var(--muted);
+      }
+
+      /* ─── FOOTER ─────────────────────────────────── */
+      footer {
+        padding: 1.8rem 4rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      footer p {
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      /* ─── LIGHTBOX ───────────────────────────────── */
+      #lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 14, 13, 0.96);
+        z-index: 1000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+      #lightbox.active {
+        display: flex;
+      }
+      #lightbox-img {
+        max-width: 88vw;
+        max-height: 88vh;
+        object-fit: contain;
+        display: block;
+        user-select: none;
+      }
+      #lb-close {
+        position: absolute;
+        top: 2rem;
+        right: 2.5rem;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-family: "Inter", sans-serif;
+        font-size: 0.65rem;
+        font-weight: 300;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      #lb-close:hover {
+        color: #fff;
+      }
+      .lb-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        padding: 1.5rem;
+        transition: color 0.2s;
+        user-select: none;
+      }
+      .lb-nav-btn:hover {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      #lb-prev {
+        left: 0.5rem;
+      }
+      #lb-next {
+        right: 0.5rem;
+      }
+      #lb-counter {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+        color: rgba(255, 255, 255, 0.35);
+      }
+      #lb-caption {
+        position: absolute;
+        bottom: 4rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.95rem;
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.5);
+        white-space: nowrap;
+      }
+
+      /* ─── RESPONSIVE ─────────────────────────────── */
+      @media (max-width: 960px) {
+        nav {
+          padding: 1.4rem 2.5rem;
+        }
+        .work-label {
+          padding: 0 2.5rem;
+        }
+        .album-header {
+          padding: 0 2.5rem 2rem;
+        }
+        .gallery {
+          padding: 0 2.5rem;
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .divider {
+          margin: 0 2.5rem 6rem;
+        }
+        #contact {
+          padding: 6rem 2.5rem 7rem;
+        }
+        footer {
+          padding: 1.5rem 2.5rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        nav {
+          padding: 1.1rem 1.5rem;
+        }
+        .nav-links {
+          gap: 1.8rem;
+        }
+        .work-label {
+          padding: 0 1.5rem;
+          margin-bottom: 3.5rem;
+        }
+        .album-header {
+          padding: 0 1.5rem 1.5rem;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+        .gallery {
+          padding: 0 1.5rem;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 4px;
+        }
+        .divider {
+          margin: 0 1.5rem 5rem;
+        }
+        #contact {
+          padding: 5rem 1.5rem 6rem;
+        }
+        footer {
+          padding: 1.5rem;
+          flex-direction: column;
+          gap: 0.4rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ─── NAVIGATION ──────────────────────────────── -->
+    <nav id="nav">
+      <a href="#hero" class="nav-logo">Shaif</a>
+      <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- ─── HERO ─────────────────────────────────────── -->
+    <section id="hero">
+      <h1 class="hero-name">Shaif</h1>
+      <p class="hero-tagline">Photographer</p>
+      <a href="#work" class="hero-scroll">Scroll</a>
+    </section>
+
+    <!-- ─── PORTFOLIO ────────────────────────────────── -->
+    <div id="work">
+      <span class="work-label">Selected Work</span>
+      <div id="albums-container"></div>
+    </div>
+
+    <!-- ─── CONTACT ───────────────────────────────────── -->
+    <section id="contact">
+      <span class="contact-eyebrow">Get in touch</span>
+      <h2 class="contact-title">Let's create something together</h2>
+      <a href="mailto:hej@shaif.se" class="contact-email">hej@shaif.se</a>
+    </section>
+
+    <!-- ─── FOOTER ────────────────────────────────────── -->
+    <footer>
+      <p>&copy; 2026 Shaif</p>
+      <p>Wedding &amp; Portrait Photography</p>
+    </footer>
+
+    <!-- ─── LIGHTBOX ──────────────────────────────────── -->
+    <div
+      id="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image viewer"
+    >
+      <button id="lb-close" aria-label="Close">Close &times;</button>
+      <button class="lb-nav-btn" id="lb-prev" aria-label="Previous image">
+        &#8592;
+      </button>
+      <img id="lightbox-img" src="" alt="" />
+      <button class="lb-nav-btn" id="lb-next" aria-label="Next image">
+        &#8594;
+      </button>
+      <span id="lb-caption"></span>
+      <span id="lb-counter"></span>
+    </div>
+
+    <!-- ─── SCRIPTS ───────────────────────────────────── -->
+    <script>
+      /* ── Nav shadow on scroll ── */
+      const nav = document.getElementById("nav");
+      window.addEventListener(
+        "scroll",
+        () => {
+          nav.classList.toggle("scrolled", window.scrollY > 20);
+        },
+        { passive: true },
+      );
+
+      /* ── Encode a raw path for use in an img src ── */
+      function encodePath(rawPath) {
+        return rawPath.split("/").map(encodeURIComponent).join("/");
+      }
+
+      /* ── Build galleries dynamically from the server API ── */
+      async function buildGalleries() {
+        const container = document.getElementById("albums-container");
+        let albums;
+        try {
+          const res = await fetch("/api/albums");
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          albums = await res.json();
+        } catch (err) {
+          container.innerHTML =
+            '<p style="padding:2rem 4rem;color:#999;font-size:0.75rem;' +
+            'letter-spacing:0.18em;text-transform:uppercase">' +
+            "Could not load albums &mdash; please start the server.</p>";
+          return;
+        }
+
+        albums.forEach((album, i) => {
+          /* Album block */
+          const block = document.createElement("div");
+          block.className = "album";
+
+          const header = document.createElement("div");
+          header.className = "album-header";
+
+          const h2 = document.createElement("h2");
+          h2.className = "album-title";
+          h2.textContent = album.name;
+          header.appendChild(h2);
+
+          if (album.meta) {
+            const metaEl = document.createElement("span");
+            metaEl.className = "album-meta";
+            metaEl.textContent = album.meta;
+            header.appendChild(metaEl);
+          }
+
+          /* Gallery grid */
+          const gallery = document.createElement("div");
+          gallery.className = "gallery";
+          gallery.dataset.album = album.name;
+
+          album.images.forEach((imgPath, idx) => {
+            const item = document.createElement("div");
+            item.className = "gallery-item";
+            item.dataset.index = idx;
+
+            const img = document.createElement("img");
+            img.src = encodePath(imgPath);
+            img.alt = album.name;
+            img.loading = "lazy";
+
+            item.appendChild(img);
+            gallery.appendChild(item);
+          });
+
+          block.appendChild(header);
+          block.appendChild(gallery);
+          container.appendChild(block);
+
+          /* Divider between albums */
+          if (i < albums.length - 1) {
+            const divider = document.createElement("div");
+            divider.className = "divider";
+            container.appendChild(divider);
+          }
+        });
+      }
+
+      buildGalleries();
+
+      /* ── Lightbox ── */
+      const lightbox = document.getElementById("lightbox");
+      const lbImg = document.getElementById("lightbox-img");
+      const lbCaption = document.getElementById("lb-caption");
+      const lbCounter = document.getElementById("lb-counter");
+      const lbClose = document.getElementById("lb-close");
+      const lbPrev = document.getElementById("lb-prev");
+      const lbNext = document.getElementById("lb-next");
+
+      let currentImages = [];
+      let currentIndex = 0;
+
+      function openLightbox(albumName, index) {
+        const gallery = document.querySelector(
+          `.gallery[data-album="${CSS.escape(albumName)}"]`,
+        );
+        if (!gallery) return;
+        currentImages = Array.from(gallery.querySelectorAll("img"));
+        currentIndex = index;
+        showImage();
+        lightbox.classList.add("active");
+        document.body.style.overflow = "hidden";
+        lbClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      function showImage() {
+        const img = currentImages[currentIndex];
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lbCaption.textContent = img.closest(".gallery").dataset.album;
+        lbCounter.textContent = currentIndex + 1 + " / " + currentImages.length;
+      }
+
+      function prevImage() {
+        currentIndex =
+          (currentIndex - 1 + currentImages.length) % currentImages.length;
+        showImage();
+      }
+
+      function nextImage() {
+        currentIndex = (currentIndex + 1) % currentImages.length;
+        showImage();
+      }
+
+      /* Event delegation — works with dynamically built items */
+      document
+        .getElementById("albums-container")
+        .addEventListener("click", (e) => {
+          const item = e.target.closest(".gallery-item");
+          if (!item) return;
+          const gallery = item.closest(".gallery");
+          const albumName = gallery.dataset.album;
+          const index = parseInt(item.dataset.index, 10);
+          openLightbox(albumName, index);
+        });
+
+      lbClose.addEventListener("click", closeLightbox);
+      lbPrev.addEventListener("click", prevImage);
+      lbNext.addEventListener("click", nextImage);
+
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("active")) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "ArrowRight") nextImage();
+      });
+
+      let touchStartX = 0;
+      lightbox.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.changedTouches[0].clientX;
+        },
+        { passive: true },
+      );
+      lightbox.addEventListener(
+        "touchend",
+        (e) => {
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(dx) > 50) dx < 0 ? nextImage() : prevImage();
+        },
+        { passive: true },
+      );
+    </script>
+  </body>
+</html>
