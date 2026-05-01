@@ -498,7 +498,7 @@
         const container = document.getElementById("albums-container");
         let albums;
         try {
-          const res = await fetch("/api/albums");
+          const res = await fetch('albums.json');
           if (!res.ok) throw new Error("HTTP " + res.status);
           albums = await res.json();
         } catch (err) {
